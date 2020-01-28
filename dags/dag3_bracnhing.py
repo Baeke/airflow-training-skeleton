@@ -32,6 +32,7 @@ from airflow.operators.python_operator import BranchPythonOperator
 def _print_exec_date(execution_date, **context):
     print(execution_date)
 
+
 def _get_weekday(execution_date, **context):
     return execution_date.strftime("%a")
 
@@ -70,5 +71,5 @@ final_task = DummyOperator(
 
 names = ["email_joe", "email_bob", "email_alice"]
 for name in names:
-    print_weekday >> branching >> DummyOperator(task_id=name, dag=dag) >> final_task
+    branching >> DummyOperator(task_id=name, dag=dag) >> final_task
 
