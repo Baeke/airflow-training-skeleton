@@ -69,7 +69,8 @@ final_task = DummyOperator(
     dag=dag,
 )
 
+
 names = ["email_joe", "email_bob", "email_alice"]
 for name in names:
-    branching >> DummyOperator(task_id=name, dag=dag) >> final_task
+    print_weekday >> branching >> DummyOperator(task_id=name, dag=dag) >> final_task
 
