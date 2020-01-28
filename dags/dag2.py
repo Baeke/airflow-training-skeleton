@@ -37,8 +37,7 @@ dag = DAG(
     dag_id='dag2',
     default_args=args,
     schedule_interval=None,
-    dagrun_timeout=timedelta(minutes=60),
-    provide_context=True
+    dagrun_timeout=timedelta(minutes=60)
 )
 
 
@@ -49,6 +48,7 @@ def _print_exec_date(execution_date, **context):
 print_execution_date = PythonOperator(
     task_id='print_execution_date',
     python_callable= _print_exec_date,
+    provide_context=True,
     dag=dag
 )
 
