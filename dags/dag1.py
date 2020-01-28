@@ -65,4 +65,4 @@ task5 = DummyOperator(
 
 # [END howto_operator_bash_template]
 # task1 >> task2 >> [task3, task4] >> task5
-task1 >> task2 >> task3 >> task5
+task1 >> task2 >> [task3, task4] >> task5
