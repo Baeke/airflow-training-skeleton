@@ -56,24 +56,22 @@ args = {
     'start_date': airflow.utils.dates.days_ago(2),
 }
 
-dag = DAG(
+with DAG(
     dag_id='dag4_postgres_hook',
     default_args=args,
     schedule_interval=None,
     dagrun_timeout=timedelta(minutes=60)
-)
+) as dag:
 
 print_data = PythonOperator(
     task_id='print_data',
     python_callable= _get_data,
-    provide_context=True,
-    dag=dag
+    provide_context=True
 )
 
 final_task = DummyOperator(
     task_id='final_task',
-    bash_command="sleep 1",
-    dag=dag,
+    bash_command="sleep 1"
 )
 
 print_data >> final_task
