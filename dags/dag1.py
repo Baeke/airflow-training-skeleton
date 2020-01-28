@@ -34,7 +34,7 @@ args = {
 dag = DAG(
     dag_id='dag1',
     default_args=args,
-    schedule_interval='@daily',
+    schedule_interval='0 0,45 0,13 ? * MON,WED,FRI *',
     dagrun_timeout=timedelta(minutes=60),
 )
 
