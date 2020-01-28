@@ -26,10 +26,14 @@ from airflow.models import DAG
 from airflow.operators.bash_operator import BashOperator
 from airflow.operators.dummy_operator import DummyOperator
 from airflow.operators.python_operator import PythonOperator
+from airflow.operators.python_operator import BranchPythonOperator
 
 
 def _print_exec_date(execution_date, **context):
     print(execution_date)
+
+def _get_weekday(execution_date, **context):
+    return execution_date.strftime("%a")
 
 
 args = {
@@ -38,47 +42,33 @@ args = {
 }
 
 dag = DAG(
-    dag_id='dag2',
+    dag_id='dag3_branching',
     default_args=args,
     schedule_interval=None,
     dagrun_timeout=timedelta(minutes=60)
 )
 
-print_execution_date = PythonOperator(
-    task_id='print_execution_date',
-    python_callable= _print_exec_date,
+print_weekday = PythonOperator(
+    task_id='print_weekday',
+    python_callable= _get_weekday,
     provide_context=True,
     dag=dag
 )
 
-# # loopje !! f is format string in python 3
-# for i in (1,5,10)
-#     wait = BashOperator(
-#         task_id=f"wait_{i}",
-#         bash_command=f"sleep {i}"
-#     )
+branching = BranchPythonOperator(
+    task_id="branching",
+    python_callable=_get_weekday,
+    provide_context=True,
+    dag=dag)
 
-wait_1 = BashOperator(
-    task_id="wait_1",
+
+final_task = DummyOperator(
+    task_id='final_task',
     bash_command="sleep 1",
     dag=dag,
 )
 
-wait_5 = BashOperator(
-    task_id="wait_5",
-    bash_command="sleep 5",
-    dag=dag,
-)
+names = ["email_joe", "email_bob", "email_alice"]
+for name in names:
+    print_weekday >> branching >> DummyOperator(task_id=name, dag=dag) >> final_task
 
-wait_10 = BashOperator(
-    task_id="wait_10",
-    bash_command="sleep 10",
-    dag=dag,
-)
-
-the_end = DummyOperator(
-    task_id='the_end',
-    dag=dag,
-)
-
-print_execution_date >> [wait_5, wait_1, wait_10] >> the_end
