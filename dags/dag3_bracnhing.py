@@ -23,7 +23,6 @@ from datetime import timedelta
 
 import airflow
 from airflow.models import DAG
-from airflow.operators.bash_operator import BashOperator
 from airflow.operators.dummy_operator import DummyOperator
 from airflow.operators.python_operator import PythonOperator
 from airflow.operators.python_operator import BranchPythonOperator
@@ -42,35 +41,33 @@ args = {
     'start_date': airflow.utils.dates.days_ago(2),
 }
 
-dag = DAG(
+with DAG(
     dag_id='dag3_branching',
     default_args=args,
     schedule_interval=None,
     dagrun_timeout=timedelta(minutes=60)
-)
+) as dag:
 
-print_weekday = PythonOperator(
-    task_id='print_weekday',
-    python_callable= _get_weekday,
-    provide_context=True,
-    dag=dag
-)
+    print_weekday = PythonOperator(
+        task_id='print_weekday',
+        python_callable= _get_weekday,
+        provide_context=True
+    )
 
-branching = BranchPythonOperator(
-    task_id="branching",
-    python_callable=_get_weekday,
-    provide_context=True,
-    dag=dag)
+    branching = BranchPythonOperator(
+        task_id="branching",
+        python_callable=_get_weekday,
+        provide_context=True,
+        trigger_rule='none_failed'
+        )
 
 
-final_task = DummyOperator(
-    task_id='final_task',
-    bash_command="sleep 1",
-    dag=dag,
-)
+    final_task = DummyOperator(
+        task_id='final_task'
+    )
 
-print_weekday >> branching
-names = ["email_joe", "email_bob", "email_alice"]
-for name in names:
-    branching >> DummyOperator(task_id=name, dag=dag) >> final_task
+    print_weekday >> branching
+    names = ["email_joe", "email_bob", "email_alice"]
+    for name in names:
+        branching >> DummyOperator(task_id=name, dag=dag) >> final_task
 
