@@ -53,7 +53,7 @@ task3 = DummyOperator(
     dag=dag,
 )
 
-task5 = DummyOperator(
+task4 = DummyOperator(
     task_id='task4',
     dag=dag,
 )
@@ -64,4 +64,5 @@ task5 = DummyOperator(
 )
 
 # [END howto_operator_bash_template]
-task1 >> task2 >> [task3, task4] >> task5
+# task1 >> task2 >> [task3, task4] >> task5
+task1 >> task2 >> task3 >> task5
