@@ -58,7 +58,7 @@ with DAG(
         task_id="branching",
         python_callable=_get_weekday,
         provide_context=True,
-        trigger_rule='one_failed'
+        trigger_rule='dummy'
         )
 
     final_task = DummyOperator(

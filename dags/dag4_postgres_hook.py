@@ -66,7 +66,6 @@ with DAG(
     print_data = PythonOperator(
         task_id='print_data',
         python_callable= _get_data,
-        provide_context=True
     )
 
     final_task = DummyOperator(
