@@ -63,16 +63,16 @@ with DAG(
     dagrun_timeout=timedelta(minutes=60)
 ) as dag:
 
-print_data = PythonOperator(
-    task_id='print_data',
-    python_callable= _get_data,
-    provide_context=True
-)
+    print_data = PythonOperator(
+        task_id='print_data',
+        python_callable= _get_data,
+        provide_context=True
+    )
 
-final_task = DummyOperator(
-    task_id='final_task',
-    bash_command="sleep 1"
-)
+    final_task = DummyOperator(
+        task_id='final_task',
+        bash_command="sleep 1"
+    )
 
-print_data >> final_task
+    print_data >> final_task
 
