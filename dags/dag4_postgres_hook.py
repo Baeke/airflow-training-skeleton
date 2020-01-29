@@ -71,12 +71,13 @@ with DAG(
         python_callable= _get_data,
     )
 
-    filename='gdd_data{}_{rundate}.csv'.format(rundate=rundate)
+    # filename='gdd_data{}_{rundate}.csv'.format(rundate=rundate)
+    print(filename)
     copy_data_to_gcs = PostgresToGoogleCloudStorageOperator(
         task_id='copy_data_to_gcs',
         sql=sql,
         bucket='gdd_bucket',
-        filename=filename,
+        filename='gdd_data{}_/{{ ds }}.json',
         postgres_conn_id='postgres_cursus_db',
         provide_context=True
     )
