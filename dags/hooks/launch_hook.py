@@ -9,6 +9,7 @@ import posixpath
 import requests
 from airflow.hooks.base_hook import BaseHook
 from airflow.exceptions import AirflowException
+from airflow.utils import apply_defaults
 from airflow.utils.log.logging_mixin import LoggingMixin
 
 
