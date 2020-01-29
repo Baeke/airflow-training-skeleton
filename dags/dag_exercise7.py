@@ -32,6 +32,7 @@ def _download_rocket_launches(ds, tomorrow_ds, **context):
         print(f"Writing to file {f.name}")
         f.write(response.text)
 
+
 def _print_stats(ds, **context):
     with open(f"/tmp/rocket_launches/ds={ds}/launches.json") as f:
         data = json.load(f)
