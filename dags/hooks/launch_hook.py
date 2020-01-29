@@ -5,8 +5,10 @@ import pathlib
 import subprocess
 import re
 import time
+
 import posixpath
 import requests
+import airflow
 from airflow.hooks.base_hook import BaseHook
 from airflow.exceptions import AirflowException
 from airflow.utils import apply_defaults
