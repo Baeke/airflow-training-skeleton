@@ -43,7 +43,8 @@ check_date = ShortCircuitOperator(
         provide_context=True,
     )
 
-# # use of f voor format dan {{{{ gebruiken om {{ 2 over te houden
+# use of f voor format dan {{{{ gebruiken om {{ 2 over te houden
+
 get_from_api_to_gcs = HttpToGcsOperator(
     task_id="get_from_api_to_gcs",
     endpoint=f"/history?start_at={{{{ ds }}}}&end_at={{{{ tomorrow_ds }}}}&base=GBP&symbols={currency}",
