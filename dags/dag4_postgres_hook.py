@@ -75,7 +75,7 @@ with DAG(
         task_id='copy_data_to_gcs',
         sql=sql,
         bucket='gdd_bucket',
-        filename='gdd_data{}_{{ds_no_dash}.csv',
+        filename='gdd_data{}_{{ds_no_dash}}.csv',
         postgres_conn_id='postgres_cursus_db',
         provide_context=True
     )
