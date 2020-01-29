@@ -29,7 +29,9 @@ from airflow.operators.python_operator import PythonOperator
 from airflow.contrib.operators.postgres_to_gcs_operator import PostgresToGoogleCloudStorageOperator
 from airflow.hooks.postgres_hook import PostgresHook
 
-sql= "SELECT * FROM land_registry_price_paid_uk limit 10"
+sql = "SELECT * FROM land_registry_price_paid_uk where extract (epoch from {{ds_nodash}}) = transfer_date limit 10"
+dataset = "gdd"
+
 
 def _get_data():
 
@@ -73,8 +75,9 @@ with DAG(
         task_id='copy_data_to_gcs',
         sql=sql,
         bucket='gdd_bucket',
-        filename='gdd_data.csv',
-        postgres_conn_id='postgres_cursus_db'
+        filename='gdd_data{}_{{ds_nodash}.csv',
+        postgres_conn_id='postgres_cursus_db',
+        provide_context=True
     )
 
     final_task = DummyOperator(
