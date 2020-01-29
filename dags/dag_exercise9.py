@@ -16,7 +16,7 @@ currency="EUR"
 
 args = {
     "owner": "godatadriven",
-    "start_date": datetime.datetime(2019, 11, 24)
+    "start_date": datetime.datetime(2019, 11, 24),
 }
 
 dag = DAG(
@@ -28,20 +28,20 @@ dag = DAG(
 
 
 def check_date(execution_date, **context):
-    return execution_date <= datetime.datetime(2019,11,28)
+    return execution_date <= datetime.datetime(2019, 11, 28)
 
 
-def _download_rocket_launches(ds, tomorrow_ds, **context):
-    query = f"https://launchlibrary.net/1.4/launch?startdate={ds}&enddate={tomorrow_ds}"
-    result_path = f"/tmp/rocket_launches/ds={ds}"
-    pathlib.Path(result_path).mkdir(parents=True, exist_ok=True)
-    response = requests.get(query)
-    print(f"response was {response}")
-
-    with open(posixpath.join(result_path, "launches.json"), "w") as f:
-        print(f"Writing to file {f.name}")
-        f.write(response.text)
-
+# def _download_rocket_launches(ds, tomorrow_ds, **context):
+#     query = f"https://launchlibrary.net/1.4/launch?startdate={ds}&enddate={tomorrow_ds}"
+#     result_path = f"/tmp/rocket_launches/ds={ds}"
+#     pathlib.Path(result_path).mkdir(parents=True, exist_ok=True)
+#     response = requests.get(query)
+#     print(f"response was {response}")
+#
+#     with open(posixpath.join(result_path, "launches.json"), "w") as f:
+#         print(f"Writing to file {f.name}")
+#         f.write(response.text)
+#
 
 def _print_stats(ds, **context):
     with open(f"/tmp/rocket_launches/ds={ds}/launches.json") as f:
