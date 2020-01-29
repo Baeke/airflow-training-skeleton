@@ -57,7 +57,7 @@ def _print_stats(ds, **context):
 # use of f voor format dan {{{{ gebruiken om {{ 2 over te houden
 get_from_api_to_gcs = HttpToGcsOperator(
     task_id="get_from_api_to_gcs",
-    endpoint=f"https://api.exchangeratesapi.io/history?start_at=/{{{{ ds - 400 }}}}&end_at=/{{{{ ds -400 }}}}&symbols=EUR&base=GBP",
+    endpoint=f"https://api.exchangeratesapi.io/history?start_at=/{{{{ ds }}}}&end_at=/{{{{ ds }}}}&symbols=EUR&base=GBP",
     gcs_path='{{ ds }}',
     gcs_bucket='gdd_bucket',
     dag=dag
