@@ -29,9 +29,10 @@ from airflow.operators.python_operator import PythonOperator
 from airflow.contrib.operators.postgres_to_gcs_operator import PostgresToGoogleCloudStorageOperator
 from airflow.hooks.postgres_hook import PostgresHook
 
+sql= "SELECT * FROM land_registry_price_paid_uk limit 10"
+
 def _get_data():
 
-    sql= "SELECT * FROM land_registry_price_paid_uk limit 10"
     hook = PostgresHook(
         postgres_conn_id='postgres_cursus_db'
     )
@@ -68,10 +69,18 @@ with DAG(
         python_callable= _get_data,
     )
 
+    copy_data_to_gcs = PostgresToGoogleCloudStorageOperator(
+        task_id='copy_data_to_gcs',
+        sql=sql,
+        bucket='gdd_bucket',
+        filename='gdd_data.csv',
+        postgres_conn_id='postgres_cursus_db'
+    )
+
     final_task = DummyOperator(
         task_id='final_task',
         bash_command="sleep 1"
     )
 
-    print_data >> final_task
+    print_data >> copy_data_to_gcs >> final_task
 
