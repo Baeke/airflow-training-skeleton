@@ -68,12 +68,12 @@ check_date = ShortCircuitOperator(
 # )
 #
 #
-# print_stats = PythonOperator(
-#     task_id="print_stats",
-#     python_callable=_print_stats,
-#     provide_context=True,
-#     dag=dag
-# )
+print_stats = PythonOperator(
+    task_id="print_stats",
+    python_callable=_print_stats,
+    provide_context=True,
+    dag=dag
+)
 
-check_date \
+check_date >> print_stats
 # >> get_from_api_to_gcs >> print_stats
