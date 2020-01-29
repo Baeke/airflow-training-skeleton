@@ -37,19 +37,6 @@ def check_date(execution_date, **context):
     return execution_date <= datetime.datetime(2019, 11, 28)
 
 
-def _print_stats(ds, **context):
-    with open(f"/tmp/rocket_launches/ds={{{{ds}}}}/launches.json") as f:
-        data = json.load(f)
-        rockets_launched = [launch["name"] for launch in data["launches"]]
-        rockets_str = ""
-
-        if rockets_launched:
-            rockets_str = f" ({' & '.join(rockets_launched)})"
-            print(f"{len(rockets_launched)} rocket launch(es) on {{{{ds}}}}{rockets_str}.")
-        else:
-            print(f"No rockets found in {f.name}")
-
-
 check_date = ShortCircuitOperator(
         task_id="check_if_before_end_of_last_year",
         python_callable=check_date,
@@ -68,12 +55,6 @@ check_date = ShortCircuitOperator(
 # )
 #
 #
-print_stats = PythonOperator(
-    task_id="print_stats",
-    python_callable=_print_stats,
-    provide_context=True,
-    dag=dag
-)
 
-check_date >> print_stats
+check_date
 # >> get_from_api_to_gcs >> print_stats
