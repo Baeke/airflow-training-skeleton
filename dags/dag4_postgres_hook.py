@@ -30,7 +30,7 @@ from airflow.contrib.operators.postgres_to_gcs_operator import PostgresToGoogleC
 from airflow.hooks.postgres_hook import PostgresHook
 
 # sql = "SELECT * FROM land_registry_price_paid_uk where extract (epoch from {{ds_no_dash}}) = transfer_date limit 10"
-sql = "SELECT * FROM land_registry_price_paid_uk where  limit 10"
+sql = "SELECT * FROM land_registry_price_paid_uk limit 10"
 
 
 def _get_data():
