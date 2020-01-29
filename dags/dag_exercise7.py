@@ -1,11 +1,12 @@
 import json
 import pathlib
 import posixpath
-import airflow
 import requests
 
+from dags.hooks.launch_hook import LaunchHook
 from airflow.models import DAG
 from airflow.operators.python_operator import PythonOperator
+
 
 args = {
     "owner": "godatadriven",
@@ -42,9 +43,17 @@ def _print_stats(ds, **context):
         else:
             print(f"No rockets found in {f.name}")
 
-download_rocket_launches = PythonOperator(
+# download_rocket_launches = PythonOperator(
+#     task_id="download_rocket_launches",
+#     python_callable=_download_rocket_launches,
+#     provide_context=True,
+#     dag=dag
+# )
+
+download_rocket_launches = LaunchHook(
     task_id="download_rocket_launches",
-    python_callable=_download_rocket_launches,
+    query='',
+    destination='',
     provide_context=True,
     dag=dag
 )
