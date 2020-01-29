@@ -71,7 +71,7 @@ with DAG(
         python_callable= _get_data,
     )
 
-    filename='gdd_data{}_{rundate}.csv'.format(rundate)
+    filename='gdd_data{}_{rundate}.csv'.format(rundate=rundate)
     copy_data_to_gcs = PostgresToGoogleCloudStorageOperator(
         task_id='copy_data_to_gcs',
         sql=sql,
