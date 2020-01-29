@@ -1,13 +1,18 @@
 import json
-import pathlib
-import posixpath
 import datetime
-import requests
 import airflow
-from hooks.launch_hook import LaunchHook
-from airflow.models import DAG
 from airflow.operators.python_operator import PythonOperator, ShortCircuitOperator
+from airflow.contrib.operators.postgres_to_gcs_operator import (
+    PostgresToGoogleCloudStorageOperator,
+)
+from airflow.contrib.operators.dataproc_operator import (
+    DataprocClusterCreateOperator,
+    DataProcPySparkOperator,
+    DataprocClusterDeleteOperator,
+)
+from airflow.models import DAG
 from operators.http_to_gcs_operator import HttpToGcsOperator
+from airflow.contrib.operators.gcs_to_bq import GoogleCloudStorageToBigQueryOperator
 
 # project_id="airflowbolcom-jan2829-99875f84"
 # analytics_bucket_name="europe-west1-training-airfl-840ef3d9-bucket"
