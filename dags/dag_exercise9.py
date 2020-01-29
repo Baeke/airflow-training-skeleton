@@ -16,6 +16,7 @@ from airflow.contrib.operators.gcs_to_bq import GoogleCloudStorageToBigQueryOper
 
 # project_id="airflowbolcom-jan2829-99875f84"
 # analytics_bucket_name="europe-west1-training-airfl-840ef3d9-bucket"
+
 bucket_name="gdd_bucket"
 currency="EUR"
 
@@ -36,18 +37,6 @@ def check_date(execution_date, **context):
     return execution_date <= datetime.datetime(2019, 11, 28)
 
 
-# def _download_rocket_launches(ds, tomorrow_ds, **context):
-#     query = f"https://launchlibrary.net/1.4/launch?startdate={ds}&enddate={tomorrow_ds}"
-#     result_path = f"/tmp/rocket_launches/ds={ds}"
-#     pathlib.Path(result_path).mkdir(parents=True, exist_ok=True)
-#     response = requests.get(query)
-#     print(f"response was {response}")
-#
-#     with open(posixpath.join(result_path, "launches.json"), "w") as f:
-#         print(f"Writing to file {f.name}")
-#         f.write(response.text)
-#
-
 def _print_stats(ds, **context):
     with open(f"/tmp/rocket_launches/ds={ds}/launches.json") as f:
         data = json.load(f)
@@ -67,23 +56,24 @@ check_date = ShortCircuitOperator(
         provide_context=True,
     )
 
-# use of f voor format dan {{{{ gebruiken om {{ 2 over te houden
-get_from_api_to_gcs = HttpToGcsOperator(
-    task_id="get_from_api_to_gcs",
-    endpoint = f"/history?start_at={{{{ ds }}}}&end_at={{{{ tomorrow_ds }}}}&base=GBP&symbols={currency}",
-    http_conn_id = "currency-http",
-    gcs_conn_id = "google_cloud_storage_default",
-    gcs_path = f"usecase/currency/{{{{ ds }}}}-{currency}.json",
-    gcs_bucket = f"{bucket_name}",
-    dag=dag
-)
+# # use of f voor format dan {{{{ gebruiken om {{ 2 over te houden
+# get_from_api_to_gcs = HttpToGcsOperator(
+#     task_id="get_from_api_to_gcs",
+#     endpoint = f"/history?start_at={{{{ ds }}}}&end_at={{{{ tomorrow_ds }}}}&base=GBP&symbols={currency}",
+#     http_conn_id = "currency-http",
+#     gcs_conn_id = "google_cloud_storage_default",
+#     gcs_path = f"usecase/currency/{{{{ ds }}}}-{currency}.json",
+#     gcs_bucket = f"{bucket_name}",
+#     dag=dag
+# )
+#
+#
+# print_stats = PythonOperator(
+#     task_id="print_stats",
+#     python_callable=_print_stats,
+#     provide_context=True,
+#     dag=dag
+# )
 
-
-print_stats = PythonOperator(
-    task_id="print_stats",
-    python_callable=_print_stats,
-    provide_context=True,
-    dag=dag
-)
-
-check_date >> get_from_api_to_gcs >> print_stats
+check_date \
+# >> get_from_api_to_gcs >> print_stats
