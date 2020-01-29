@@ -1,7 +1,9 @@
 import json
 import pathlib
 import posixpath
+import datetime
 import requests
+
 import airflow
 from hooks.launch_hook import LaunchHook
 from airflow.models import DAG
@@ -10,7 +12,7 @@ from operators.http_to_gcs_operator import HttpToGcsOperator
 
 args = {
     "owner": "godatadriven",
-    "start_date": airflow.utils.dates.days_ago(10)
+    "start_date": datetime.datetime(2018, 1, 1)
 }
 
 dag = DAG(
