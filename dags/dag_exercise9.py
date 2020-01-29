@@ -1,4 +1,3 @@
-import json
 import datetime
 import airflow
 from airflow.operators.python_operator import PythonOperator, ShortCircuitOperator
@@ -14,9 +13,8 @@ from airflow.models import DAG
 from operators.http_to_gcs_operator import HttpToGcsOperator
 from airflow.contrib.operators.gcs_to_bq import GoogleCloudStorageToBigQueryOperator
 
-# project_id="airflowbolcom-jan2829-99875f84"
-# analytics_bucket_name="europe-west1-training-airfl-840ef3d9-bucket"
-
+project_id="airflowbolcom-jan2829-99875f84"
+analytics_bucket_name="europe-west1-training-airfl-840ef3d9-bucket"
 bucket_name="gdd_bucket"
 currency="EUR"
 
@@ -28,8 +26,8 @@ args = {
 dag = DAG(
     dag_id="real_estate",
     default_args=args,
-    description="DAG downloading rocket launches from Launch Library.",
-    schedule_interval="0 0 * * *"
+    description="all learned during training",
+    schedule_interval=None
 )
 
 
@@ -42,8 +40,9 @@ check_date = ShortCircuitOperator(
         python_callable=check_date,
         provide_context=True,
     )
-
-# use of f voor format dan {{{{ gebruiken om {{ 2 over te houden
+'''
+use of f voor format dan {{{{ gebruiken om {{ 2 over te houden
+'''
 
 get_from_api_to_gcs = HttpToGcsOperator(
     task_id="get_from_api_to_gcs",
