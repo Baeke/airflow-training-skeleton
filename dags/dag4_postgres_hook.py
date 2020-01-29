@@ -31,7 +31,7 @@ from airflow.hooks.postgres_hook import PostgresHook
 
 # sql = "SELECT * FROM land_registry_price_paid_uk where extract (epoch from {{ds_no_dash}}) = transfer_date limit 10"
 sql = "SELECT * FROM land_registry_price_paid_uk limit 10"
-
+rundate='{{ds_nodash}}'
 
 def _get_data():
 
@@ -71,11 +71,12 @@ with DAG(
         python_callable= _get_data,
     )
 
+    filename='gdd_data{}_{rundate}.csv'.format(rundate)
     copy_data_to_gcs = PostgresToGoogleCloudStorageOperator(
         task_id='copy_data_to_gcs',
         sql=sql,
         bucket='gdd_bucket',
-        filename='gdd_data{}_{{ds_no_dash}}.csv',
+        filename=filename,
         postgres_conn_id='postgres_cursus_db',
         provide_context=True
     )
