@@ -46,7 +46,7 @@ check_date = ShortCircuitOperator(
 # # use of f voor format dan {{{{ gebruiken om {{ 2 over te houden
 get_from_api_to_gcs = HttpToGcsOperator(
     task_id="get_from_api_to_gcs",
-    endpoin=f"/history?start_at={{{{ ds }}}}&end_at={{{{ tomorrow_ds }}}}&base=GBP&symbols={currency}",
+    endpoint=f"/history?start_at={{{{ ds }}}}&end_at={{{{ tomorrow_ds }}}}&base=GBP&symbols={currency}",
     http_conn_id="currency-http",
     gcs_conn_id="google_cloud_storage_default",
     gcs_path=f"usecase/currency/{{{{ ds }}}}-{currency}.json",
