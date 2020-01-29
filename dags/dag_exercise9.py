@@ -17,6 +17,9 @@ project_id="airflowbolcom-jan2829-99875f84"
 analytics_bucket_name="europe-west1-training-airfl-840ef3d9-bucket"
 bucket_name="gdd_bucket"
 currency="EUR"
+# start_at="{{ ds}}"
+# end_at="{{ tomorrow_ds }}"
+
 
 args = {
     "owner": "godatadriven",
@@ -27,7 +30,7 @@ dag = DAG(
     dag_id="real_estate",
     default_args=args,
     description="all learned during training",
-    schedule_interval=None
+    schedule_interval="@daily"
 )
 
 
@@ -39,6 +42,7 @@ check_date = ShortCircuitOperator(
         task_id="check_if_before_end_of_last_year",
         python_callable=check_date,
         provide_context=True,
+        dag=dag
     )
 '''
 use of f voor format dan {{{{ gebruiken om {{ 2 over te houden
