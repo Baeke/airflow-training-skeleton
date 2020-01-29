@@ -2,7 +2,7 @@ import json
 import pathlib
 import posixpath
 import requests
-from dags.hooks.launch_hook import LaunchHook
+from hooks.launch_hook import LaunchHook
 from airflow.models import DAG
 from airflow.operators.python_operator import PythonOperator
 
